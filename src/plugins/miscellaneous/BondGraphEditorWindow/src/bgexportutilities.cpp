@@ -587,10 +587,10 @@ loadBondGraph(nlohmann::json &res)
             auto fElem = elements[def["first"]];
             auto fPort = def["firstPort"];
             auto fports = fElem->getPorts();
-            auto cFP = 0;
+            int cFP = 0;
             for (size_t pc = 0; pc < fports.size(); pc++) {
                 if (fports[pc]->getId() == fPort) {
-                    cFP = pc;
+                    cFP = (int)pc;
                     break;
                 }
             }
@@ -598,10 +598,10 @@ loadBondGraph(nlohmann::json &res)
             auto lElem = elements[def["second"]];
             auto lPort = def["secondPort"];
             auto lports = lElem->getPorts();
-            auto cLP = 0;
+            int cLP = 0;
             for (size_t pc = 0; pc < lports.size(); pc++) {
                 if (lports[pc]->getId() == lPort) {
-                    cLP = pc;
+                    cLP = (int)pc;
                     break;
                 }
             }
@@ -1100,20 +1100,20 @@ getBondGraphFor(nlohmann::json &items,
             auto fElem = elements[def["first"]];
             auto fPort = def["firstPort"];
             auto fports = fElem->getPorts();
-            auto cFP = 0;
+            int cFP = 0;
             for (size_t pc = 0; pc < fports.size(); pc++) {
                 if (fports[pc]->getId() == fPort) {
-                    cFP = pc;
+                    cFP = (int)pc;
                     break;
                 }
             }
             auto lElem = elements[def["second"]];
             auto lPort = def["secondPort"];
             auto lports = lElem->getPorts();
-            auto cLP = 0;
+            int cLP = 0;
             for (size_t pc = 0; pc < lports.size(); pc++) {
                 if (lports[pc]->getId() == lPort) {
-                    cLP = pc;
+                    cLP = (int)pc;
                     break;
                 }
             }
@@ -1146,6 +1146,17 @@ getBondGraphFor(nlohmann::json &items,
         }
     }
     return ioBondGraph;
+}
+
+nlohmann::json to_PHS(const BGEditorScene &p){
+    nlohmann::json res = p;
+    auto items = res["sceneItems"];
+    if (items.size() == 0)
+        return "";
+    
+    std::map<std::string, std::string> importFile;
+    auto ioBondGraph = getBondGraphFor(items, importFile);       
+    return ioBondGraph->computePortHamiltonian();
 }
 
 QString to_cellML(QString name, QString dir, const BGEditorScene &p)

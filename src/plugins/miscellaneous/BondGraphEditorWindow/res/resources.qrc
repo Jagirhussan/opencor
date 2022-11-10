@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/Icons">
         <file alias="Cellml">Icons/CellML_logo.png</file>
+        <file alias="PHS">Icons/PHS.png</file>
         <file alias="Edge-Mutual">Icons/Direction-Both.png</file>
         <file alias="Edge-Directed">Icons/Direction-Reverse.png</file>
         <file alias="Edge-Half">Icons/Direction-One.png</file>

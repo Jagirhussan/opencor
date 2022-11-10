@@ -655,7 +655,7 @@ QPixmap BGElement::getRenderedLatex(int font_size)
     if (itemColours.contains(m_type)) {
         mathText.setFontColor(itemColours[m_type]);
     }
-    // parse some LaTeX code (the Schroedinger's equation)
+    // parse some LaTeX code 
     mathText.parse(mDisplayName);
 
     // use the draw() methods to draw the equation using a QPainter (here onto a

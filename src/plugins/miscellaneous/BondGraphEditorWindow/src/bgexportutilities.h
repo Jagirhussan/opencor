@@ -46,5 +46,7 @@ void from_json(const nlohmann::json &j, SceneItem &p);
 
 QString to_cellML(QString name, QString dir, const BGEditorScene &p);
 
+nlohmann::json to_PHS(const BGEditorScene &p);
+
 } // namespace BondGraphEditorWindow
 } // namespace OpenCOR

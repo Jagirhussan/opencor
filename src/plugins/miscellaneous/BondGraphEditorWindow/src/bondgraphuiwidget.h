@@ -30,6 +30,7 @@ namespace BondGraphEditorWindow {
 class WidgetBox;
 class QAccordion;
 class BGElementEditorUIController;
+class BGPorthamiltonianRenderer;
 
 class BondGraphUIWidget : public QWidget
 {
@@ -82,6 +83,7 @@ private:
     QWidget *m_canvasParent;
     QStatusBar *m_statusBar;
     QToolBar *m_toolBar;
+    BGPorthamiltonianRenderer* phsWindow;
     BGElementEditorUIController *uiController;
     QString m_lastPath;
     QString m_currentFileName;

@@ -21,6 +21,7 @@ along with this program. If not, see <https://gnu.org/licenses>.
 #include <QGraphicsItem>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
+#include <QMessageBox>
 
 #include <bgconnection.h>
 #include <bgeditorview.h>
@@ -47,6 +48,7 @@ bool SceneMenuController::exec(
 {
     m_scene = dynamic_cast<BGElementEditorScene *>(scene);
     m_scene->setPastePosition(context_menu_event->scenePos());
+    QMessageBox::critical(nullptr,"Scene menu exec","Exec called ");
     BGPort *portItem = dynamic_cast<BGPort *>(trigger_item);
     if (portItem == nullptr) {
         QMenu menu;
@@ -73,6 +75,7 @@ void SceneMenuController::fillMenu(
     QGraphicsSceneContextMenuEvent * /*contextMenuEvent*/)
 {
     auto portItem = dynamic_cast<BGPort *>(trigger_item);
+    QMessageBox::critical(nullptr,"fillmenu","Fill menu called ");
     if (portItem == nullptr) {
         auto sceneActions = scene->getActions();
         auto bgElementScene = m_scene;

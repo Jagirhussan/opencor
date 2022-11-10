@@ -50,6 +50,7 @@ along with this program. If not, see <https://gnu.org/licenses>.
 #include <bgelementconnectionpropertiesui.h>
 #include <bgelementeditoruicontroller.h>
 #include <bondgraphuiwidget.h>
+#include "bgporthamiltonianrenderer.h"
 
 #include <bgeditorview.h>
 #include <bgelementeditorscene.h>
@@ -194,6 +195,10 @@ void BGElementEditorUIController::setAnnotationEditor(
             &BGElementEditorUIController::onElementAnnotationUpdated);
 }
 
+void BGElementEditorUIController::setPHSRenderer(BGPorthamiltonianRenderer* p_renderer){
+    m_phsrenderer = p_renderer;
+}
+
 void BGElementEditorUIController::onElementAnnotationUpdated(BGElement *)
 {
     m_editorScene->addUndoState();
@@ -239,8 +244,18 @@ void BGElementEditorUIController::exportToCellML()
     // Make sure updates are captured
     m_elementPropertiesPanel->flush();
     QString filename = to_cellML(projectname, projectdir, *m_editorScene);
+    renderPortHamiltonian();
+
+
     if (filename != "")
         Q_EMIT serializedToCellML(filename);
+}
+
+void BGElementEditorUIController::renderPortHamiltonian(){
+    if(m_phsrenderer!=nullptr){
+        nlohmann::json res = to_PHS(*m_editorScene);
+        m_phsrenderer->setPorthamiltonian(res);
+    }
 }
 
 void BGElementEditorUIController::newBondGraph()
@@ -256,6 +271,10 @@ void BGElementEditorUIController::newBondGraph()
         // nullptr exception
         m_elementPropertiesPanel->flush();
         m_editorScene->clear();
+        m_phsrenderer->clear();
+        nlohmann::json js;
+        js["clear"] = true;
+        m_phsrenderer->setPorthamiltonian(js);
     }
     m_editorScene->removeBackUp(m_backupFile);
     QSettings bgSettings;
@@ -393,6 +412,12 @@ void BGElementEditorUIController::createMenus()
     cellmlAction->setText(tr("Export to &CellML..."));
     connect(cellmlAction, &QAction::triggered, this,
             &BGElementEditorUIController::exportToCellML);
+
+    QAction *phsAction =
+        new QAction(QIcon(":/Icons/PHS"), tr("&PHS..."));
+    phsAction->setText(tr("Generate &Port Hamiltonian..."));
+    connect(phsAction, &QAction::triggered, this,
+            &BGElementEditorUIController::renderPortHamiltonian);
 
     QAction *exportActionSVG =
         new QAction(QIcon(":oxygen/mimetypes/image-svg+xml.png"), tr("Export as &Image..."));
@@ -559,6 +584,7 @@ void BGElementEditorUIController::createMenus()
     toolBar->addAction(exportActionSVG);
     toolBar->addSeparator();
     toolBar->addAction(cellmlAction);
+    toolBar->addAction(phsAction);
 
     toolBar->addSeparator();
     // Handled by mouse action

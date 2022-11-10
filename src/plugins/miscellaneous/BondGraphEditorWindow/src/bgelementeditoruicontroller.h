@@ -38,6 +38,7 @@ class BGElementEditorScene;
 class BGPort;
 class BGEditorView;
 class BGAnnotationViewMetadataEditDetailsUI;
+class BGPorthamiltonianRenderer;
 
 class BGElementEditorUIController : public QObject
 {
@@ -52,6 +53,7 @@ public:
     void doWriteSettings(QSettings &settings);
 
     void setAnnotationEditor(BGAnnotationViewMetadataEditDetailsUI *p_editor);
+    void setPHSRenderer(BGPorthamiltonianRenderer* p_renderer);
 
     // callbacks
     void onNewDocumentCreated();
@@ -75,6 +77,7 @@ public Q_SLOTS:
     void paste();
     void selectAll();
     void del();
+    void renderPortHamiltonian();
     // protected API
 protected:
     BGElementEditorScene *scene()
@@ -178,6 +181,7 @@ private:
     class BGEditorSearchDialog *m_searchDialog = nullptr;
     class BGImageExportDialog *m_imageDialog = nullptr;
     BGAnnotationViewMetadataEditDetailsUI *m_annotationEditor = nullptr;
+    BGPorthamiltonianRenderer *m_phsrenderer = nullptr;
 };
 
 } // namespace BondGraphEditorWindow

@@ -254,7 +254,7 @@ void BGEditorView::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton) {
         m_scrollTimer.stop();
     }
-
+    QGraphicsView::mouseReleaseEvent(e);
     // disable RMB pan
     if (e->button() == Qt::RightButton && !e->buttons() && (dragMode() == ScrollHandDrag)) {
         QMouseEvent fake(e->type(), e->pos(), Qt::LeftButton, Qt::LeftButton,
@@ -266,8 +266,9 @@ void BGEditorView::mouseReleaseEvent(QMouseEvent *e)
         setInteractive(m_interactiveTmp);
 
         QTimer::singleShot(100, this, SLOT(restoreContextMenu()));
+
     }
-    // else
+    //else
     {
         QGraphicsView::mouseReleaseEvent(e);
     }

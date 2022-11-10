@@ -40,6 +40,7 @@ add_plugin(BondGraphEditorWindow
         src/bgcolorschemesuicontroller.cpp
         src/bgconnectionstable.cpp
         src/bgporteditordialog.cpp
+        src/bgporthamiltonianrenderer.cpp
         src/controlpoint.cpp
         src/bgeditorsearchdialog.cpp
         src/bgtextlabeledit.cpp
@@ -79,6 +80,7 @@ add_plugin(BondGraphEditorWindow
         src/bgcolorschemesuicontroller.h
         src/bgconnectionstable.h
         src/bgporteditordialog.h
+        src/bgporthamiltonianrenderer.h
         src/controlpoint.h
         src/bgeditorsearchdialog.h
         src/bgtextlabeledit.h

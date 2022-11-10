@@ -35,9 +35,11 @@ along with this program. If not, see <https://gnu.org/licenses>.
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QList>
 
 #include "bgannotationviewmetadataeditdetailsui.h"
 #include "bgelementeditoruicontroller.h"
+#include "bgporthamiltonianrenderer.h"
 
 #include "thirdparty/qtaccordian/qaccordion.h"
 #include "thirdparty/widgetbox/libraryitem.h"
@@ -277,17 +279,41 @@ void BondGraphUIWidget::setupUi()
     m_widgetBox->load(js);
 
     wSplitter->addWidget(m_widgetBox);
+
+    QSplitter *phsSplitter = new QSplitter(this);
+    phsSplitter->setOrientation(Qt::Vertical);
     m_canvasParent = new QWidget(this);
     m_canvasParent->setAcceptDrops(true);
     QSplitter *cSplitter = new QSplitter(this);
 
-    cSplitter->addWidget(m_canvasParent);
+    phsSplitter->addWidget(m_canvasParent);
+    phsWindow = new BGPorthamiltonianRenderer(this);
+    phsSplitter->addWidget(phsWindow);
+    phsSplitter->setCollapsible(0,false);
+    phsSplitter->setCollapsible(1,true);
+    //Enable disable handle depending on result
+
+    // phsSplitter->handle(1)->setEnabled(false);
+    // connect(phsWindow,&BGPorthamiltonianRenderer::phsRendered,[&phsSplitter,this](bool success){
+    //     // if(!success){
+    //     //     QList<int> sz = QList<int>(phsSplitter->sizes());
+    //     //     sz[0] += sz[1];
+    //     //     sz[1] = 0;
+    //     //     phsSplitter->setSizes(sz);
+    //     //     auto pw = this->phsWindow->width();
+    //     //     this->phsWindow->resize(pw,1);
+    //     // }
+    //     phsSplitter->handle(1)->setEnabled(success);
+    // });
+
+    cSplitter->addWidget(phsSplitter);
+    //cSplitter->addWidget(m_canvasParent);
     m_controls = new QAccordion(this);
-    m_controls->setMultiActive(
-        true); // Enable multiple panes to be open simultaneously
+    // Enable multiple panes to be open simultaneously
+    m_controls->setMultiActive(true); 
 
     auto annotation = new BGAnnotationViewMetadataEditDetailsUI(this);
-    m_annotation = annotation;
+    m_annotation = annotation; //Maintain a handle, note m_annotation is of type QWidget
     auto controlsTab = new QTabWidget(this);
     controlsTab->addTab(m_controls, "Graphics");
     controlsTab->addTab(m_annotation, "Annotation");
@@ -298,10 +324,13 @@ void BondGraphUIWidget::setupUi()
     // Setup the controller
     uiController = new BGElementEditorUIController(this, m_doBackup);
     uiController->setAnnotationEditor(annotation);
+    uiController->setPHSRenderer(phsWindow);
     connect(uiController, &BGElementEditorUIController::serializedToCellML,
             [this](QString path) {
                 Q_EMIT cellMLFileGenerated(path);
             });
+    
+    
 
     // cSplitter->addWidget(m_controls);
     cSplitter->addWidget(controlsTab);

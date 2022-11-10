@@ -5,7 +5,7 @@ project(BondGraphAPIPlugin)
 set(PACKAGE_NAME BondGraphAPI)
 set(PACKAGE_VERSION 1.0)
 set(PACKAGE_REPOSITORY libbondgraph)
-set(GIT_TAG v1.0-opencor)
+set(GIT_TAG porthamiltonian)
 set(RELEASE_TAG v1.0-opencor)
 
 get_full_local_external_package_dir()
@@ -92,8 +92,8 @@ endif()
             ${FULL_LOCAL_EXTERNAL_PACKAGE_DIR}
         GIT_REPOSITORY
            https://github.com/Jagirhussan/${PACKAGE_REPOSITORY}
-        # GIT_TAG
-        #     ${GIT_TAG}
+        GIT_TAG
+             ${GIT_TAG}
         GIT_SHALLOW
         CMAKE_CACHE_ARGS
             -DCMAKE_C_FLAGS:STRING=${PACKAGE_C_FLAGS}

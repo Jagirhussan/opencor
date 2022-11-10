@@ -40,6 +40,7 @@ along with this program. If not, see <https://gnu.org/licenses>.
 #include <QPaintEngine>
 #include <QPainter>
 #include <QPixmapCache>
+#include <QThread>
 
 #include <qopengl.h>
 
@@ -1781,7 +1782,10 @@ void BGEditorScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouse_event)
         onLeftDoubleClick(mouseEvent, hoverItem);
       else
         onLeftClick(mouseEvent, hoverItem);
-    }*/
+    */
+    }else if (mouse_event->button() == Qt::RightButton && !mouse_event->buttons()){
+
+
     }
 
     m_doubleClick = false;
