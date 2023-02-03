@@ -333,6 +333,14 @@ void BGElementEditorUIController::loadFile()
 
         // center scene contents
         m_editorView->centerContent();
+
+        m_elementPropertiesPanel->flush();
+        m_phsrenderer->clear();
+        nlohmann::json js;
+        js["clear"] = true;
+        m_phsrenderer->setPorthamiltonian(js);
+
+
     } catch (...) {
         QApplication::restoreOverrideCursor();
         QMessageBox::critical(

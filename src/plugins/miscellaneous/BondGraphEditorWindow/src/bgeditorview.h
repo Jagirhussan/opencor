@@ -79,7 +79,7 @@ private:
     bool m_interactiveTmp = false;
     bool m_moved = false;
     QPoint m_pos;
-
+    QPoint m_mouseReleasePos;
     double m_currentZoom = 1.0;
     double m_zoomBeforeFit = 0.0; // 0 means no zoom called yet
     QPointF m_dxyBeforeFit;

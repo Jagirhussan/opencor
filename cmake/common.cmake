@@ -918,7 +918,7 @@ endforeach()")
     set(CMAKE_CODE "${CMAKE_CODE}\n
 # Compress our package
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar -czf ${PACKAGE_FILE} ${PACKAGED_FILES}
+execute_process(COMMAND \"${CMAKE_COMMAND}\" -E tar -czf ${PACKAGE_FILE} ${PACKAGED_FILES}
                 WORKING_DIRECTORY ${FULL_LOCAL_EXTERNAL_PACKAGE_DIR}
                 RESULT_VARIABLE RESULT
                 OUTPUT_QUIET)

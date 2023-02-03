@@ -251,12 +251,14 @@ void BGEditorView::mouseMoveEvent(QMouseEvent *e)
 
 void BGEditorView::mouseReleaseEvent(QMouseEvent *e)
 {
+    m_mouseReleasePos = e->pos();
     if (e->button() == Qt::LeftButton) {
         m_scrollTimer.stop();
     }
-    QGraphicsView::mouseReleaseEvent(e);
+   
     // disable RMB pan
-    if (e->button() == Qt::RightButton && !e->buttons() && (dragMode() == ScrollHandDrag)) {
+    if (e->button() == Qt::RightButton && dragMode() == ScrollHandDrag) {
+    //if (e->button() == Qt::RightButton && !e->buttons() && (dragMode() == ScrollHandDrag)) {
         QMouseEvent fake(e->type(), e->pos(), Qt::LeftButton, Qt::LeftButton,
                          e->modifiers());
         QGraphicsView::mouseReleaseEvent(&fake);
@@ -266,12 +268,10 @@ void BGEditorView::mouseReleaseEvent(QMouseEvent *e)
         setInteractive(m_interactiveTmp);
 
         QTimer::singleShot(100, this, SLOT(restoreContextMenu()));
+        return;
+    }
+    QGraphicsView::mouseReleaseEvent(e);
 
-    }
-    //else
-    {
-        QGraphicsView::mouseReleaseEvent(e);
-    }
 }
 
 #else // Linux/Unix/etc.
@@ -317,7 +317,8 @@ void BGEditorView::mouseMoveEvent(QMouseEvent *e)
 
 void BGEditorView::mouseReleaseEvent(QMouseEvent *e)
 {
-    // disabel RMB pan
+    m_mouseReleasePos = e->pos();
+    // disable RMB pan
     if (e->button() == Qt::RightButton && dragMode() == ScrollHandDrag) {
         QMouseEvent fake(e->type(), e->pos(), Qt::LeftButton, Qt::LeftButton,
                          e->modifiers());
@@ -357,6 +358,10 @@ void BGEditorView::keyReleaseEvent(QKeyEvent *key_event)
 {
     if (key_event->key() == Qt::Key_Home) {
         centerContent();
+    }else if (key_event->key() == Qt::Key_F10) {
+        //QContextMenuEvent fake(QContextMenuEvent::Keyboard,m_mouseReleasePos,this->mapToGlobal(m_mouseReleasePos));
+        QContextMenuEvent fake(QContextMenuEvent::Keyboard, m_mouseReleasePos);
+        QGraphicsView::contextMenuEvent(&fake);
     }
 }
 

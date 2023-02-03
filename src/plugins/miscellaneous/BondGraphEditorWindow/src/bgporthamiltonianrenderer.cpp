@@ -197,7 +197,7 @@ BGPorthamiltonianRenderer::BGPorthamiltonianRenderer(QWidget *parent)
   pal.setColor(QPalette::Window, Qt::white);
   latexWidget->setAutoFillBackground(true);
   latexWidget->setPalette(pal);
-  latexWidget->setMinimumSize(QSize(1200,600));
+  latexWidget->setMinimumSize(QSize(600,400));
 
   legend = new QVBoxLayout(legendWidget);
   auto hs = new QSplitter();
@@ -345,38 +345,39 @@ void BGPorthamiltonianRenderer::setPorthamiltonian(nlohmann::json &ph) {
     btn->setVisible(false);
     connect(btn, &QPushButton::clicked, this,
             &BGPorthamiltonianRenderer::serialisetofile);
+    if(phs["DICValid"]){
+      documentString << "\\section*{Derivation}" << std::endl;
+      {
+        auto impDS = getImplicitDS(phs["ImplicitDS"]);
+        QLabel *mat =
+            new QLabel(tr("Implicit representation of the Dirac structure:"));
+        latex->addWidget(mat);
+        QLabel *lab = new QLabel();
+        lab->setPixmap(std::get<0>(impDS));
+        //lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        latex->addWidget(lab);
+        documentString << "Implicit representation of the Dirac structure:\\\\ "
+                      << std::endl
+                      << "\\begin{center}" << std::endl
+                      << "$" << std::get<1>(impDS) << "$" << std::endl
+                      << "\\end{center}" << std::endl;
+      }
 
-    documentString << "\\section*{Derivation}" << std::endl;
-    {
-      auto impDS = getImplicitDS(phs["ImplicitDS"]);
-      QLabel *mat =
-          new QLabel(tr("Implicit representation of the Dirac structure:"));
-      latex->addWidget(mat);
-      QLabel *lab = new QLabel();
-      lab->setPixmap(std::get<0>(impDS));
-      lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      latex->addWidget(lab);
-      documentString << "Implicit representation of the Dirac structure:\\\\ "
-                     << std::endl
-                     << "\\begin{center}" << std::endl
-                     << "$" << std::get<1>(impDS) << "$" << std::endl
-                     << "\\end{center}" << std::endl;
-    }
-
-    {
-      auto expDS = getExplicitDS(phs["ExplicitDS"]);
-      QLabel *mat =
-          new QLabel(tr("Explicit representation of the Dirac structure:"));
-      latex->addWidget(mat);
-      QLabel *lab = new QLabel();
-      lab->setPixmap(std::get<0>(expDS));
-      lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-      latex->addWidget(lab);
-      documentString << "Explicit representation of the Dirac structure:\\\\ "
-                     << std::endl
-                     << "\\begin{center}" << std::endl
-                     << "$" << std::get<1>(expDS) << "$" << std::endl
-                     << "\\end{center}" << std::endl;
+      {
+        auto expDS = getExplicitDS(phs["ExplicitDS"]);
+        QLabel *mat =
+            new QLabel(tr("Explicit representation of the Dirac structure:"));
+        latex->addWidget(mat);
+        QLabel *lab = new QLabel();
+        lab->setPixmap(std::get<0>(expDS));
+        //lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        latex->addWidget(lab);
+        documentString << "Explicit representation of the Dirac structure:\\\\ "
+                      << std::endl
+                      << "\\begin{center}" << std::endl
+                      << "$" << std::get<1>(expDS) << "$" << std::endl
+                      << "\\end{center}" << std::endl;
+      }
     }
     {
       QLabel *mat = new QLabel(tr("State vector (<b>x</b>):"));
@@ -384,7 +385,7 @@ void BGPorthamiltonianRenderer::setPorthamiltonian(nlohmann::json &ph) {
       QLabel *lab = new QLabel();
       auto sv = getRenderedMatrix(phs["stateVector"]);
       lab->setPixmap(std::get<0>(sv));
-      lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      //lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       latex->addWidget(lab);
       documentString << "State Vector:\\\\" << std::endl
                      << "\\begin{center}" << std::endl
@@ -397,7 +398,7 @@ void BGPorthamiltonianRenderer::setPorthamiltonian(nlohmann::json &ph) {
       QLabel *lab = new QLabel();
       std::string hm = phs["hamiltonian"];
       lab->setPixmap(getPixMapForLatex("H = " + hm));
-      lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      //lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       latex->addWidget(lab);
       // Get the symengine latex version
       hm = phs["hamiltonianLatex"];
@@ -422,7 +423,7 @@ void BGPorthamiltonianRenderer::setPorthamiltonian(nlohmann::json &ph) {
       latex->addWidget(mat);
       QLabel *lab = new QLabel();
       lab->setPixmap(getPixMapForLatex(phsString));
-      lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+      //lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
       latex->addWidget(lab);
       documentString << "\\section*{Explicit Input (u) Output "
                         "(y) Port Hamiltonian}"
@@ -464,7 +465,7 @@ void BGPorthamiltonianRenderer::setPorthamiltonian(nlohmann::json &ph) {
       if (topString.str().size()) {
         QLabel *lab = new QLabel();
         lab->setPixmap(getPixMapForLatex(topString.str()));
-        lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        //lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         latex->addWidget(lab);
         documentString << "Matrices:\\\\" << std::endl
                        << "\\begin{center}" << std::endl
@@ -496,7 +497,7 @@ void BGPorthamiltonianRenderer::setPorthamiltonian(nlohmann::json &ph) {
       if (topString.str().size()) {
         QLabel *lab = new QLabel();
         lab->setPixmap(getPixMapForLatex(topString.str()));
-        lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        //lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         latex->addWidget(lab);
         if (matricestextAdded)
           documentString << "\\\\" << std::endl
@@ -554,7 +555,7 @@ void BGPorthamiltonianRenderer::setPorthamiltonian(nlohmann::json &ph) {
       if (gm.str().size()) {
         QLabel *lab = new QLabel();
         lab->setPixmap(getPixMapForLatex(gm.str()));
-        lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        //lab->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         latex->addWidget(lab);
       } else {
         QLabel *lab = new QLabel(tr("PHS matrices are not available!!"));

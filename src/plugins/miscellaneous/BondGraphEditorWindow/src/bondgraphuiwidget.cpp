@@ -277,8 +277,13 @@ void BondGraphUIWidget::setupUi()
     }
     QString js = QString::fromStdString(iconMaps.dump());
     m_widgetBox->load(js);
-
-    wSplitter->addWidget(m_widgetBox);
+    //wSplitter->addWidget(m_widgetBox);
+    //Add tabwidget to segregate elementary models and templates
+    QTabWidget* bricsTab = new QTabWidget(this);
+    bricsTab->addTab(m_widgetBox,"Elementary");
+    QWidget * test = new QWidget();
+    bricsTab->addTab(test,"Templates");
+    wSplitter->addWidget(bricsTab);
 
     QSplitter *phsSplitter = new QSplitter(this);
     phsSplitter->setOrientation(Qt::Vertical);

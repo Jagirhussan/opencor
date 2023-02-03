@@ -321,8 +321,26 @@ void to_json(nlohmann::json &j, const BGElement &p)
     }
     j["ports"] = ports;
     j["annotation"] = p.m_annotation;
+    //Clean up the json, for instance, "value":{"value":xxx} in states and Parameters
+    auto &stateAndParameters = p.m_annotation["statesAndParameters"];
+    std::vector<nlohmann::json> newStateAndParameters;
+    for(auto& el : stateAndParameters){
+        std::map<std::string,nlohmann::json> value = el;
+        
+        if(value["value"].is_object()){
+            // When there is value value recursion
+            if(value["value"].size()==1 && value["value"].count("value")==1){
+                value["value"] = el["value"]["value"];
+            }
+        }
+        newStateAndParameters.push_back(value);
+    }
+    j["annotation"]["statesAndParameters"] = newStateAndParameters;
+
+    
     const SceneItem &bgi = dynamic_cast<const SceneItem &>(p);
     j["sceneitem"] = bgi;
+    //QMessageBox::information(nullptr,"Annotation ",QString::fromStdString(j.dump()));
 }
 
 void from_json(const nlohmann::json &j, BGElement &p)
